@@ -28,7 +28,17 @@ class AuthController {
     }
 
     async login_post(req, res) {
-        res.send('user login');
+        const {userName, password} = req.body;
+        try{
+            const user = await User.login(userName, password);
+            res.status(201).json({
+                _id: user._id,
+                fullName: user.fullName,
+                profilePicture: user.profilePicture,
+            })
+        }catch (e){
+            res.status(400).json({error: e.message});
+        }
     }
 
     async logout(req, res) {
