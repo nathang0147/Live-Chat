@@ -73,7 +73,7 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-.env
+/backend/.env
 .env.development.local
 .env.test.local
 .env.production.local
@@ -101,8 +101,8 @@ dist
 .vuepress/dist
 
 # vuepress v2.x temp and cache directory
-.temp
-.cache
+backend/.temp
+/backend/.cache
 
 # Docusaurus cache and generated files
 .docusaurus
@@ -128,3 +128,32 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+backend/package-lock.json
+backend/package.json
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+frontend/node_modules
+frontend/.pnp
+frontend/.pnp.js
+
+# testing
+frontend/coverage
+
+# production
+frontend/build
+
+# misc
+/frontend/.DS_Store
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
+.idea/
