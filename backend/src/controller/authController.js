@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const generateTokenAndCookies = require('../utils/generateToken');
 
 class AuthController {
     async signup_get(req, res) {
@@ -9,7 +10,7 @@ class AuthController {
         const {fullName, userName, password, confirmPassword, gender } = req.body;
         try{
          const user = await User.signup(fullName, userName, password, confirmPassword, gender);
-
+         generateTokenAndCookies(user._id, res);
         console.log(user);
         res.status(201).json({
             _id: user._id,
@@ -35,6 +36,7 @@ class AuthController {
                 _id: user._id,
                 fullName: user.fullName,
                 profilePicture: user.profilePicture,
+
             })
         }catch (e){
             res.status(400).json({error: e.message});
