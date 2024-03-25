@@ -32,6 +32,7 @@ class AuthController {
         const {userName, password} = req.body;
         try{
             const user = await User.login(userName, password);
+            generateTokenAndCookies(user._id, res);
             res.status(201).json({
                 _id: user._id,
                 fullName: user.fullName,
