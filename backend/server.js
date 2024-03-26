@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./src/routes');
+const cookieParser = require('cookie-parser');
 
 //Create express
 const app = express();
@@ -13,6 +14,7 @@ app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
 });
+app.use(cookieParser())
 
 //routes
 routes(app);

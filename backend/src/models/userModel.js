@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    //refresh token in db
+    refreshToken: {
+        type: String
+    }
 });
 
 userSchema.statics.signup = async function(fullName, userName, password, confirmPassword, gender){
