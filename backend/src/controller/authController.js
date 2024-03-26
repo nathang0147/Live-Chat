@@ -59,9 +59,15 @@ class AuthController {
     }
 
     async logout(req, res) {
+        const cookie = req.cookies;
+        if(!cookie || !cookie.refreshToken){throw new Error('No token found in cookies');}
+
         try{
-            res.cookie('refreshToken', '', {
-                maxAge: 0
+            await User.findOneAndUpdate({refreshToken: cookie.refreshToken},{refreshToken: ''}, {new: true});
+            res.clearCookie('refreshToken',{
+                httpOnly: true,
+                secure: process.env.NODE_ENV !== "development",
+                sameSite: "strict"
             });
             res.status(200).json({message: 'Logout successfully'});
             res.redirect('/login');
