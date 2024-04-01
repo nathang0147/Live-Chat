@@ -138,6 +138,9 @@ backend/package.json
 frontend/node_modules
 frontend/.pnp
 frontend/.pnp.js
+frontend/dist
+frontend/dist-ssr
+frontend/*.local
 
 # testing
 frontend/coverage
@@ -157,3 +160,13 @@ frontend/build
 /frontend/yarn-error.log*
 
 .idea/
+
+
+/frontend/.vscode/*
+/frontend/!.vscode/extensions.json
+/frontend/.idea
+/frontend/*.suo
+/frontend/*.ntvs*
+/frontend/*.njsproj
+/frontend/*.sln
+/frontend/*.sw?
