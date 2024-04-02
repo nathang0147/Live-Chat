@@ -49,7 +49,7 @@ const Login = () => {
                         <span className='text-blue-500'> ChatApp</span>
                     </strong>
                     <div className="text-center pt-4 text-opacity-55 ">
-                        <strong style={{ color: '#535C91', fontSize: '17px' }}>Join for exclusive access!</strong>
+                        <strong style={{ color: '#535C91', fontSize: '17px' }}>Welcome back!</strong>
                     </div>
 
                     <form className="p-2">
