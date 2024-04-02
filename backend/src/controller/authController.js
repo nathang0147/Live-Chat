@@ -3,9 +3,6 @@ const {generateAccessToken, generateRefreshToken} = require("../utils/generateTo
 const jwt = require('jsonwebtoken');
 
 class AuthController {
-    async signup_get(req, res) {
-        res.render('signup');
-    }
 
     async signup_post(req, res) {
         const {fullName, userName, password, confirmPassword, gender } = req.body;
@@ -32,14 +29,13 @@ class AuthController {
         }
     }
 
-    async login_get(req, res) {
-        res.render('login');
-    }
 
     async login_post(req, res) {
         const {userName, password} = req.body;
+
         try{
             const user = await User.login(userName, password);
+            console.log(user);
             //token
             const access_token = generateAccessToken(user._id);
             const refresh_token = generateRefreshToken(user._id, res);
