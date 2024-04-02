@@ -1,7 +1,43 @@
+import {useState} from "react";
+import {login} from "../../utils/ApiFunction.js";
+import {useNavigate} from "react-router-dom";
+
 const Login = () => {
 
-    const handleLogin = () => {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('password')
 
+    const navigator = useNavigate()
+
+
+    const handleInputUsername = (e) => {
+        setUsername(e.target.value)
+    }
+
+    const handleInputPassword = (e) => {
+        setPassword(e.target.value)
+    }
+
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        if(password.length<5) {
+            alert("Please enter password again")
+        }else {
+            try{
+                const resData = await login(username, password);
+                if (resData && resData.access_token) {
+                    console.log(resData)
+                    localStorage.setItem("access_token", resData.access_token);
+                    navigator("/home")
+                } else {
+                    console.error('No access token in response', resData);
+                }
+            }catch (e){
+                console.log(e.message)
+            }
+
+        }
     }
 
     return (
@@ -32,10 +68,11 @@ const Login = () => {
                                     className="grow"
                                     required
                                     placeholder="Username"
+                                    value={username}
+                                    onChange={handleInputUsername}
                                 />
                             </label>
                         </div>
-
 
                         <div className="pt-1">
                             <label className="label p-2">
@@ -51,14 +88,21 @@ const Login = () => {
                                 <input
                                     type="password"
                                     className="grow"
-                                    value="password"/>
+                                    required
+                                    value={password}
+                                    onChange={handleInputPassword}
+                                />
                             </label>
                         </div>
+
                         <a href="/signup" className=" text-sm hover:underline hover:text-blue-500 mt-2 inline-block">
                             {"Don't"} have an account?
                         </a>
+
                         <div className="pt-3 pb-1">
-                            <button type="submit" className="btn btn-block btn-sm">Login</button>
+                            <button type="submit" className="btn btn-block btn-sm"
+                            onClick={handleLogin}
+                            >Login</button>
                         </div>
 
                     </form>
