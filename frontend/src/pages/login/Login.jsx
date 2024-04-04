@@ -27,8 +27,15 @@ const Login = () => {
             try{
                 const resData = await login(username, password);
                 if (resData && resData.access_token) {
-                    console.log(resData)
                     localStorage.setItem("access_token", resData.access_token);
+
+                    //save User Data
+                    const userData = {
+                        _id: resData._id,
+                        fullName: resData.fullName,
+                        profilePicture: resData.profilePicture,
+                    }
+                    localStorage.setItem("chat_user", JSON.stringify(userData));
                     navigator("/home")
                 } else {
                     console.error('No access token in response', resData);
