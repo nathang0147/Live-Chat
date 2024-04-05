@@ -3,8 +3,8 @@ export const api = axios.create({
     baseURL: "http://localhost:3000/api",
 });
 
-// refreshToken if status is 401 authorized
 
+// refreshToken if status is 401 authorized
 api.interceptors.response.use((response) =>{
     return response;
 }, async function (error){
@@ -21,6 +21,7 @@ api.interceptors.response.use((response) =>{
     return Promise.reject(error);
 })
 
+
 export function getHeaders() {
     const token = localStorage.getItem("access_token");
     return {
@@ -30,7 +31,6 @@ export function getHeaders() {
 
 export async function login(username, password) {
     try{
-        console.log(username, password)
         const response = await api.post("/auth/login", {
             userName: username,
             password: password
@@ -39,7 +39,18 @@ export async function login(username, password) {
         return response.data;
     }catch (e){
         console.log(e.message)
-        throw new Error("Error logging in")
+        throw new Error("Error logging in");
+    }
+}
+
+export async function signup(userInfo) {
+    try{
+        const response = await api.post("/auth/signup", userInfo);
+            console.log(response.data)
+            return response.data;
+    }catch (error){
+        console.log(error.message)
+        throw new Error("Error signing up");
     }
 }
 
