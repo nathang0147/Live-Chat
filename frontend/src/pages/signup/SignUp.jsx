@@ -2,6 +2,7 @@ import GenderCheckBox from "./GenderCheckbox.jsx";
 import {useState} from "react";
 import {signup} from "../../utils/ApiFunction.js";
 import {Link, useNavigate} from "react-router-dom";
+import useAuthContext from "../../hook/useAuthContext.jsx";
 
 const SignUp = () => {
     const [fullName, setFullName] = useState('');
@@ -13,7 +14,25 @@ const SignUp = () => {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
+    const {dispatch} = useAuthContext();
+
     const navigator = useNavigate();
+
+    const handleInputErrors = ({ fullName, userName, password, confirmPassword, gender }) => {
+        if (!fullName || !userName || !password || !confirmPassword || !gender) {
+            throw new Error("Please fill in all fields");
+        }
+
+        if (password !== confirmPassword) {
+            throw new Error("Passwords do not match");
+        }
+
+        if (password.length < 6) {
+            throw new Error("Password must be at least 6 characters");
+        }
+
+        return true;
+    }
 
     const handleInputFullName = (e) => {
         setFullName(e.target.value);
@@ -37,8 +56,10 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         setIsLoading(true);
         try{
+            handleInputErrors({ fullName, userName, password, confirmPassword, gender });
             const user = {fullName, userName, password, confirmPassword, gender};
 
             const resData = await signup(user);
@@ -53,6 +74,9 @@ const SignUp = () => {
                 profilePicture: resData.profilePicture,
             }
             localStorage.setItem("chat_user", JSON.stringify(userData));
+
+            //dispatch to global state
+            dispatch({type: "LOGIN", payload: userData});
 
             //navigate to home page
             navigator("/home")

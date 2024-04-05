@@ -1,11 +1,14 @@
 import {useState} from "react";
 import {login} from "../../utils/ApiFunction.js";
 import {Link, useNavigate} from "react-router-dom";
+import useAuthContext from "../../hook/useAuthContext.jsx";
 
 const Login = () => {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('password')
+
+    const {dispatch} = useAuthContext();
 
     const navigator = useNavigate()
 
@@ -36,6 +39,9 @@ const Login = () => {
                         profilePicture: resData.profilePicture,
                     }
                     localStorage.setItem("chat_user", JSON.stringify(userData));
+
+                    dispatch({type: "LOGIN", payload: userData});
+
                     navigator("/home")
                 } else {
                     console.error('No access token in response', resData);
