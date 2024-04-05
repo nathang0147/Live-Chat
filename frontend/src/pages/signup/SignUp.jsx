@@ -1,6 +1,92 @@
 import GenderCheckBox from "./GenderCheckbox.jsx";
+import {useState} from "react";
+import {signup} from "../../utils/ApiFunction.js";
+import {Link, useNavigate} from "react-router-dom";
+import useAuthContext from "../../hook/useAuthContext.jsx";
 
 const SignUp = () => {
+    const [fullName, setFullName] = useState('');
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [gender, setGender] = useState('');
+
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const {dispatch} = useAuthContext();
+
+    const navigator = useNavigate();
+
+    const handleInputErrors = ({ fullName, userName, password, confirmPassword, gender }) => {
+        if (!fullName || !userName || !password || !confirmPassword || !gender) {
+            throw new Error("Please fill in all fields");
+        }
+
+        if (password !== confirmPassword) {
+            throw new Error("Passwords do not match");
+        }
+
+        if (password.length < 6) {
+            throw new Error("Password must be at least 6 characters");
+        }
+
+        return true;
+    }
+
+    const handleInputFullName = (e) => {
+        setFullName(e.target.value);
+    }
+
+    const handleInputUserName = (e) => {
+        setUserName(e.target.value);
+    }
+
+    const handleInputPassword = (e) => {
+        setPassword(e.target.value);
+    }
+
+    const handleInputConfirmPassword = (e) => {
+        setConfirmPassword(e.target.value);
+    }
+
+    const handleCheckboxChange = (gender) => {
+        setGender(gender);
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        setIsLoading(true);
+        try{
+            handleInputErrors({ fullName, userName, password, confirmPassword, gender });
+            const user = {fullName, userName, password, confirmPassword, gender};
+
+            const resData = await signup(user);
+
+            //save token
+            localStorage.setItem("access_token", resData.access_token);
+
+            //save User Data
+            const userData = {
+                _id: resData._id,
+                fullName: resData.fullName,
+                profilePicture: resData.profilePicture,
+            }
+            localStorage.setItem("chat_user", JSON.stringify(userData));
+
+            //dispatch to global state
+            dispatch({type: "LOGIN", payload: userData});
+
+            //navigate to home page
+            navigator("/home")
+
+        }catch (e){
+            setError(e.message);
+            setIsLoading(false);
+        }
+    }
+
     return (
         <div className=" flex flex-col items-center justify-center min-w-96 mx-auto">
             <div className="h-full w-full bg-gray-500 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20 border border-gray-100">
@@ -10,7 +96,16 @@ const SignUp = () => {
                         <span className='text-blue-500'> ChatApp</span>
                     </strong>
 
-                    <form className="p-2">
+                    {error && <div role="alert" className="alert alert-error">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none"
+                                 viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>{error}</span>
+                        </div>}
+
+                    <form className="p-2" onSubmit={handleSubmit}>
                         <div>
                             <label className="label p-2">
                                 <span className="text-base label-text text-amber-50">Full Name</span>
@@ -26,7 +121,8 @@ const SignUp = () => {
                                     className="grow"
                                     required
                                     placeholder="Enter your full Name"
-
+                                    value={fullName}
+                                    onChange={handleInputFullName}
                                 />
                             </label>
                         </div>
@@ -46,7 +142,8 @@ const SignUp = () => {
                                     className="grow"
                                     required
                                     placeholder="Username"
-
+                                    value={userName}
+                                    onChange={handleInputUserName}
                                 />
                             </label>
                         </div>
@@ -67,6 +164,8 @@ const SignUp = () => {
                                     className="grow"
                                     required
                                     placeholder="Password"
+                                    value={password}
+                                    onChange={handleInputPassword}
                                 />
                             </label>
                         </div>
@@ -87,19 +186,25 @@ const SignUp = () => {
                                     className="grow"
                                     required
                                     placeholder="Confirm Password"
+                                    value={confirmPassword}
+                                    onChange={handleInputConfirmPassword}
                                 />
                             </label>
                         </div>
-                        <GenderCheckBox/>
+                        <GenderCheckBox onCheckBoxChange={handleCheckboxChange} selectedGender={gender}/>
 
-                        <a href="/login" className=" text-sm hover:underline hover:text-blue-500 mt-2 inline-block">
+                        <Link to="/login" className=" text-sm hover:underline hover:text-blue-500 mt-2 inline-block" >
                             Already have an account?
-                        </a>
+                        </Link>
 
                         <div className="pt-3 pb-1">
-                            <button type="submit" className="btn btn-block btn-sm"
-                            >Login
-                            </button>
+                            {isLoading ? (
+                                <button className="btn btn-block btn-sm" disabled="disabled">
+                                    <span className="loading loading-spinner"></span>
+                                </button>) :
+                                (
+                                <button type="submit" className="btn btn-block btn-sm">Sign up</button>
+                                )}
                         </div>
 
                     </form>

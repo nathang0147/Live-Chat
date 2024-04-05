@@ -23,9 +23,8 @@ class AuthController {
             access_token
         })
         }catch (e){
-            console.log(e.message
-            )
-            res.status(400).json({error: e.message});
+            console.log(e.message)
+            res.status(400).json(e.message);
         }
     }
 
@@ -50,7 +49,7 @@ class AuthController {
                 access_token
             })
         }catch (e){
-            res.status(400).json({error: e.message});
+            res.status(400).json(e.message);
         }
     }
 

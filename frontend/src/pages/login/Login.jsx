@@ -1,11 +1,14 @@
 import {useState} from "react";
 import {login} from "../../utils/ApiFunction.js";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import useAuthContext from "../../hook/useAuthContext.jsx";
 
 const Login = () => {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('password')
+
+    const {dispatch} = useAuthContext();
 
     const navigator = useNavigate()
 
@@ -36,6 +39,9 @@ const Login = () => {
                         profilePicture: resData.profilePicture,
                     }
                     localStorage.setItem("chat_user", JSON.stringify(userData));
+
+                    dispatch({type: "LOGIN", payload: userData});
+
                     navigator("/home")
                 } else {
                     console.error('No access token in response', resData);
@@ -58,6 +64,8 @@ const Login = () => {
                     <div className="text-center pt-4 text-opacity-55 ">
                         <strong style={{ color: '#535C91', fontSize: '17px' }}>Welcome back!</strong>
                     </div>
+
+
 
                     <form className="p-2">
                         <div>
@@ -102,9 +110,9 @@ const Login = () => {
                             </label>
                         </div>
 
-                        <a href="/signup" className=" text-sm hover:underline hover:text-blue-500 mt-2 inline-block">
+                        <Link to="/signup" className=" text-sm hover:underline hover:text-blue-500 mt-2 inline-block">
                             {"Don't"} have an account?
-                        </a>
+                        </Link>
 
                         <div className="pt-3 pb-1">
                             <button type="submit" className="btn btn-block btn-sm"
