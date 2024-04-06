@@ -55,6 +55,17 @@ export async function signup(userInfo) {
     }
 }
 
+export async function logout() {
+    try{
+        await api.post("/auth/logout");
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("chat_user");
+    }catch (e){
+        console.log(e.message)
+        throw new Error("Error logging out");
+    }
+}
+
 
 
 
