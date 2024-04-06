@@ -10,8 +10,6 @@ const Login = () => {
 
     const {dispatch} = useAuthContext();
 
-    const navigator = useNavigate()
-
 
     const handleInputUsername = (e) => {
         setUsername(e.target.value)
@@ -41,8 +39,6 @@ const Login = () => {
                     localStorage.setItem("chat_user", JSON.stringify(userData));
 
                     dispatch({type: "LOGIN", payload: userData});
-
-                    navigator("/home")
                 } else {
                     console.error('No access token in response', resData);
                 }
