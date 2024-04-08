@@ -11,7 +11,10 @@ const app = express();
 
 //Use the express-static middleware
 app.use(express.json()); // for parsing application/json for post/patch request to access to body(data) of request
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:4000', // specify the origin
+    credentials: true,  // allow credentials
+}));
 app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();

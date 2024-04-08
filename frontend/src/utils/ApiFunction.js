@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as toast from "react-dom/test-utils";
 export const api = axios.create({
-    baseURL: "http://localhost:3000/api",
+    baseURL: "http://localhost:3000/api"
 });
 
 
@@ -10,10 +10,11 @@ api.interceptors.response.use((response) =>{
     return response;
 }, async function (error){
     const originalRequest = error.config;
-
-    if(error.status === 401 && !originalRequest._retry){
+    if(error.response.status === 401 && !originalRequest._retry){
         originalRequest._retry = true;
-        const res = await api.post("/auth/refresh");
+        const res = await api.post("/auth/refresh", {},{
+            withCredentials: true
+        });
 
         localStorage.setItem("access_token", res.data.newAccessToken);
         originalRequest.headers.Authorization = `Bearer ${res.data.newAccessToken}`;
@@ -47,7 +48,6 @@ export async function login(username, password) {
 export async function signup(userInfo) {
     try{
         const response = await api.post("/auth/signup", userInfo);
-            console.log(response.data)
             return response.data;
     }catch (error){
         console.log(error.message)
@@ -68,7 +68,7 @@ export async function logout() {
 
 export async function getConversation() {
     try{
-        const response = await api.get("/users", {
+        const response = await api.get("/users/", {
             headers: getHeaders()
         });
         return response.data;
@@ -97,6 +97,7 @@ export async function getMessage(receiverId) {
         const response = await api.get(`/messages/${receiverId}`, {
             headers: getHeaders()
         });
+        console.log(response.data)
         return response.data;
     }catch (e){
         console.log(e.message)

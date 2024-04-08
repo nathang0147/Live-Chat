@@ -7,6 +7,7 @@ class MessageController {
         try {
             const {message} = req.body;
             const {id : receiverId} = req.params;
+
             const senderId = req.user._id;
 
             // console.log("Sender ID: ", senderId);
@@ -23,8 +24,8 @@ class MessageController {
             }
 
             const newMessage = new Message({
-                senderID : senderId,
-                receiverID : receiverId,
+                senderId,
+                receiverId,
                 message,
             });
 

@@ -13,7 +13,7 @@ const Conversations = () => {
             try{
                 const resData = await getConversation();
 
-                setConversations(resData.data);
+                setConversations(resData);
                 setLoading(false);
             }catch (error) {
                 console.error(error);
@@ -25,7 +25,7 @@ const Conversations = () => {
 
     return (
         <div className="py-2 flex flex-col overflow-auto">
-            {conversations.map((conversation) => (
+            {conversations.map((conversation,idx) => (
                 <Conversation key={conversation._id} conversation={conversation} emoji={getRandomEmoji()} lastIdx={idx === conversations.length-1}/>
             ))}
 

@@ -14,7 +14,7 @@ function App() {
             <Routes>
                 <Route path='/' element={chat_user ? <Navigate to="/home"/> : <Login />} />
                 <Route path='/signup' element={chat_user ? <Navigate to="/home"/> : <SignUp />} />
-                <Route path='/home' element={chat_user ? <Navigate to="/"/> :<Home />} />
+                <Route path='/home' element={!chat_user ? <Navigate to="/"/> :<Home />} />
             </Routes>
         </Router>
       </div>
