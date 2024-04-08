@@ -66,6 +66,44 @@ export async function logout() {
     }
 }
 
+export async function getAllUsers() {
+    try{
+        const response = await api.get("/users", {
+            headers: getHeaders()
+        });
+        return response.data;
+    }catch (e){
+        console.log(e.message)
+        throw new Error("Error getting users");
+    }
+}
+
+export async function sendMessage(receiverId, message) {
+    try{
+        const response = await api.post(`/messages/send/${receiverId}`, {
+            message
+        }, {
+            headers: getHeaders()
+        });
+        return response.data;
+    }catch (e){
+        console.log(e.message)
+        throw new Error("Error sending message");
+    }
+}
+
+export async function getMessage(receiverId) {
+    try{
+        const response = await api.get(`/messages/${receiverId}`, {
+            headers: getHeaders()
+        });
+        return response.data;
+    }catch (e){
+        console.log(e.message)
+        throw new Error("Error getting messages");
+    }
+}
+
 
 
 
