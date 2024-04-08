@@ -1,6 +1,6 @@
 import Conversation from "./Conversation.jsx";
 import {useEffect, useState} from "react";
-import {getAllUsers} from "../../utils/ApiFunction.js";
+import {getConversation} from "../../utils/ApiFunction.js";
 import {getRandomEmoji} from "../../utils/emoji.js";
 
 const Conversations = () => {
@@ -11,7 +11,7 @@ const Conversations = () => {
         const getConversations = async () => {
             setLoading(true)
             try{
-                const resData = await getAllUsers();
+                const resData = await getConversation();
 
                 setConversations(resData.data);
                 setLoading(false);

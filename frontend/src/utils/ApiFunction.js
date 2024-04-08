@@ -66,7 +66,7 @@ export async function logout() {
     }
 }
 
-export async function getAllUsers() {
+export async function getConversation() {
     try{
         const response = await api.get("/users", {
             headers: getHeaders()
