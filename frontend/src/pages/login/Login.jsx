@@ -38,6 +38,7 @@ const Login = () => {
                     }
                     localStorage.setItem("chat_user", JSON.stringify(userData));
 
+
                     dispatch({type: "LOGIN", payload: userData});
                 } else {
                     console.error('No access token in response', resData);
