@@ -1,7 +1,8 @@
 import axios from "axios";
 import * as toast from "react-dom/test-utils";
 export const api = axios.create({
-    baseURL: "http://localhost:3000/api"
+    baseURL: "http://localhost:3000/api",
+    withCredentials: true
 });
 
 
@@ -97,7 +98,6 @@ export async function getMessage(receiverId) {
         const response = await api.get(`/messages/${receiverId}`, {
             headers: getHeaders()
         });
-        console.log(response.data)
         return response.data;
     }catch (e){
         console.log(e.message)
