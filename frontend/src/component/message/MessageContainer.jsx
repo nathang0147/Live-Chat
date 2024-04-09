@@ -1,7 +1,7 @@
 import Messages from "./Messages.jsx";
 import MessageInput from "./MessageInput.jsx";
 import NoChatSelected from "./NoChatSelected.jsx";
-import useConversation from "../../zustand/useConversation.jsx";
+import useConversation from "../../hook/zustand/useConversation.jsx";
 import {useEffect} from "react";
 
 const MessageContainer = () => {

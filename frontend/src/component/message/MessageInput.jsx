@@ -1,6 +1,6 @@
 import {BsSend} from "react-icons/bs";
 import {useEffect, useState} from "react";
-import useConversation from "../../zustand/useConversation.jsx";
+import useConversation from "../../hook/zustand/useConversation.jsx";
 import message from "./Message.jsx";
 import {sendMessage} from "../../utils/ApiFunction.js";
 
@@ -18,6 +18,7 @@ const MessageInput = () => {
         try {
 
             const response = await sendMessage(selectedConversation._id, message);
+
             setLoading(false);
             setMessages([...messages, response]);
         } catch (e) {

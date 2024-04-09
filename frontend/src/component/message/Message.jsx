@@ -1,13 +1,12 @@
 
 import { extractTime } from "../../utils/extractTime";
-import useConversation from "../../zustand/useConversation";
+import useConversation from "../../hook/zustand/useConversation";
 import useAuthContext from "../../hook/useAuthContext.jsx";
 
 const Message = ({ message }) => {
     const { chat_user } = useAuthContext();
     const { selectedConversation } = useConversation();
 
-    console.log("Message: ", message);
 
     const fromMe = message.senderID === chat_user._id;
     const formattedTime = extractTime(message.createdAt);
