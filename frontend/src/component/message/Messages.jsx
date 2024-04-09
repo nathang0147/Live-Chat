@@ -1,8 +1,9 @@
 import Message from "./Message.jsx";
 import {useEffect, useRef, useState} from "react";
-import useConversation from "../../zustand/useConversation.jsx";
+import useConversation from "../../hook/zustand/useConversation.jsx";
 import {getMessage} from "../../utils/ApiFunction.js";
 import MessageSkeleton from "../skeletons/MessageSkeleton.jsx";
+import useListenMessages from "../../hook/useListenMessages.jsx";
 const Messages = () => {
 
     const [error, setError] = useState(null);
@@ -12,29 +13,32 @@ const Messages = () => {
     const lastMessage = useRef();
 
     useEffect(() => {
-        setTimeout(() => {lastMessage.current?.scrollIntoView({ behavior: "smooth"});}, 1000);
+        const fetchMessages = async () => {
+            setLoading(true);
+            try {
+                const response = await getMessage(selectedConversation._id);
+                setMessages(response);
+                setLoading(false);
+            } catch (error) {
+                console.error(error);
+                setError(error.message);
+                setLoading(false);
+            }
+        };
 
-    },[messages])
-
-    useEffect(() => {
         if(selectedConversation?._id) fetchMessages();
     }, [selectedConversation?._id, setMessages])
 
+    useListenMessages()
 
 
-    const fetchMessages = async () => {
-        setLoading(true);
-        try {
-            const response = await getMessage(selectedConversation._id);
+    useEffect(() => {
+        setTimeout(() => {lastMessage.current?.scrollIntoView({ behavior: "smooth"});}, 100);
 
-            setMessages(response);
-            setLoading(false);
-        } catch (error) {
-            console.error(error);
-            setError(error.message);
-            setLoading(false);
-        }
-    }
+    },[messages])
+
+
+
 
 
     return (
