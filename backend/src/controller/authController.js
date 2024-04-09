@@ -15,7 +15,6 @@ class AuthController {
         //save in database
             await User.findByIdAndUpdate(user._id, {refreshToken: refresh_token}, {new: true});
 
-        console.log(user);
         res.status(201).json({
             _id: user._id,
             fullName: user.fullName,
@@ -34,7 +33,7 @@ class AuthController {
 
         try{
             const user = await User.login(userName, password);
-            console.log(user);
+
             //token
             const access_token = generateAccessToken(user._id);
             const refresh_token = generateRefreshToken(user._id, res);
@@ -55,6 +54,7 @@ class AuthController {
 
     async logout(req, res) {
         const cookie = req.cookies;
+        // console.log(cookie);
         if(!cookie || !cookie.refreshToken){throw new Error('No token found in cookies');}
 
         try{
@@ -64,8 +64,8 @@ class AuthController {
                 secure: process.env.NODE_ENV !== "development",
                 sameSite: "strict"
             });
-            res.status(200).json({message: 'Logout successfully'});
-            res.redirect('/login');
+            res.status(200).json({message: 'Logout successfully'} );
+
         }catch (e){
             console.error(e.message)
             res.status(500).json({error: "Internal Server Error"});

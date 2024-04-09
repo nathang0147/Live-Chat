@@ -32,7 +32,7 @@ export const AuthContextProvider = ({children}) => {
     console.log("current user: ", state);
 
     return (
-        <authContext.Provider value={{}}>
+        <authContext.Provider value={{...state, dispatch}}>
             {children}
         </authContext.Provider>
     )

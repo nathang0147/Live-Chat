@@ -1,5 +1,6 @@
 const Message = require('../models/messageModel');
 const Conversation = require('../models/conversationModel');
+const {getReceiverId, io} = require("../socket/socket");
 
 
 class MessageController {
@@ -7,6 +8,7 @@ class MessageController {
         try {
             const {message} = req.body;
             const {id : receiverId} = req.params;
+
             const senderId = req.user._id;
 
             // console.log("Sender ID: ", senderId);
@@ -23,20 +25,27 @@ class MessageController {
             }
 
             const newMessage = new Message({
-                senderID : senderId,
-                receiverID : receiverId,
+                senderID: senderId,
+                receiverID: receiverId,
                 message,
             });
+
+            console.log("New Message: ", newMessage)
 
             if (newMessage){
                 conversation.messages.push(newMessage._id);
             }
 
-
-            //SOCKET IO will be implemented here
-
             //this will run in parallel
             await Promise.all([conversation.save(), newMessage.save()]);
+
+            //SOCKET IO will be implemented here
+            const receiverSocketId = getReceiverId(receiverId);
+            console.log("Receiver Socket ID: ", receiverSocketId)
+            if(receiverSocketId){
+                //io.to(<socket.id>).emit() send message to the specific user
+                io.to(receiverSocketId).emit('newMessage', newMessage);
+            }
 
             res.status(200).json(newMessage);
 

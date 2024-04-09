@@ -17,6 +17,7 @@ const authMiddleware = async (req, res, next) => {
 
     try{
         const {userId} = jwt.verify(token, process.env.TOKEN_SECRET);
+        console.log({userId})
         req.user =  await User.findOne({_id: userId}).select('-password')
         next();
     }catch (e){

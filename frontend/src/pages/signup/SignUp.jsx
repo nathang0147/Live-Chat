@@ -16,8 +16,6 @@ const SignUp = () => {
 
     const {dispatch} = useAuthContext();
 
-    const navigator = useNavigate();
-
     const handleInputErrors = ({ fullName, userName, password, confirmPassword, gender }) => {
         if (!fullName || !userName || !password || !confirmPassword || !gender) {
             throw new Error("Please fill in all fields");
@@ -78,8 +76,6 @@ const SignUp = () => {
             //dispatch to global state
             dispatch({type: "LOGIN", payload: userData});
 
-            //navigate to home page
-            navigator("/home")
 
         }catch (e){
             setError(e.message);
