@@ -1,27 +1,9 @@
 import Conversation from "./Conversation.jsx";
-import {useEffect, useState} from "react";
-import {getConversation} from "../../utils/ApiFunction.js";
 import {getRandomEmoji} from "../../utils/emoji.js";
+import useGetConversation from "../../hook/useGetConversation.jsx";
 
 const Conversations = () => {
-    const [conversations, setConversations] = useState([]);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        const getConversations = async () => {
-            setLoading(true)
-            try{
-                const resData = await getConversation();
-
-                setConversations(resData);
-                setLoading(false);
-            }catch (error) {
-                console.error(error);
-                setLoading(false);
-            }
-        }
-        getConversations();
-    }, [])
+    const { loading, conversations } = useGetConversation()
 
     return (
         <div className="py-2 flex flex-col overflow-auto">

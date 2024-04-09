@@ -1,32 +1,15 @@
 import { FaSearch } from "react-icons/fa";
-import {useEffect, useState} from "react";
-import {getConversation} from "../../utils/ApiFunction.js";
-import useConversation from "../../zustand/useConversation.jsx";
+import { useState} from "react";
+import useConversation from "../../hook/zustand/useConversation.jsx";
+import useGetConversation from "../../hook/useGetConversation.jsx";
 
 const SearchInput = () => {
     const [search, setSearch] = useState("");
 
-    const [conversations, setConversations] = useState([]);
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const {setSelectedConversation} = useConversation();
-
-    useEffect(() => {
-        const getConversations = async () => {
-            setLoading(true)
-            try{
-                const resData = await getConversation();
-
-                setConversations(resData.data);
-                setLoading(false);
-            }catch (error) {
-                console.error(error);
-                setLoading(false);
-            }
-        }
-        getConversations();
-    }, [])
+    const {conversations} = useGetConversation()
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -34,7 +17,6 @@ const SearchInput = () => {
         if(search < 3){
             setError("Search query must be at least 3 characters long");
         }
-
         const conversation = conversations.find((c) => c.fullName.toLowerCase().includes(search.toLowerCase()));
 
         if(conversation) {
@@ -48,8 +30,10 @@ const SearchInput = () => {
 
     return (
         <form className="flex items-center gap-2" onSubmit={handleSubmit}>
+            {error && <p className="text-red-500">{error}</p>}
             <input type="text" placeholder="Find your friend..." className="input input-bordered rounded-full"
-            onChange={(e) => {setSearch(e.target.value)}}
+                   value={search}
+                onChange={(e) => {setSearch(e.target.value)}}
             />
             <button className="btn btn-circle rounded-full bg-[#41C9E2] text-white" type="submit">
                 <FaSearch className="w-6 h-6"/>
