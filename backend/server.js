@@ -14,7 +14,7 @@ const {app,io,server} = require("./src/socket/socket");
 app.use(express.json()); // for parsing application/json for post/patch request to access to body(data) of request
 app.use(cookieParser())
 app.use(cors({
-    origin: 'http://localhost:4000', // specify the origin
+    origin: 'https://live-chat-gray.vercel.app/', // specify the origin
     credentials: true,  // allow credentials
 }));
 app.use((req, res, next) => {
