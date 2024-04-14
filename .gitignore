@@ -129,8 +129,6 @@ backend/.temp
 .yarn/install-state.gz
 .pnp.*
 
-backend/package-lock.json
-backend/package.json
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
