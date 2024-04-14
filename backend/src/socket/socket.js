@@ -10,7 +10,7 @@ const server = http.createServer(app);
 //add socket.io on top of express in http server
 const io = new Server(server,{
     cors: {
-        origin: "http://localhost:4000",
+        origin: "https://live-chat-gray.vercel.app/",
         methods: ["GET", "POST"],
         credentials: true
     }
