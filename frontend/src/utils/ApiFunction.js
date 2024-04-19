@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as toast from "react-dom/test-utils";
 export const api = axios.create({
-    baseURL: "https://live-chat-0i4u.onrender.com/api",
+    baseURL: "http://localhost:3000/api",
     withCredentials: true
 });
 

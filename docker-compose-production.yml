@@ -1,0 +1,46 @@
+version: "3"
+services:
+  client:
+    image: client-production:local
+    restart: unless-stopped
+#    ports:
+#      - "80:80"
+#      - "443:443"
+    volumes:
+      - ./app/node_modules
+      - ./frontend:/app
+
+    networks:
+      - live-chat
+  server:
+    image: server
+#    ports:
+#      - "3000:3000"
+    restart: unless-stopped
+    env_file: ./backend/.env
+    networks:
+      - live-chat
+    volumes:
+        - ./backend:/app
+        - /app/node_modules
+
+  nginx:
+      restart: always
+      depends_on:
+        - server
+        - client
+      build:
+        context: ./nginx
+        dockerfile: Dockerfile
+      ports:
+        - "8080:80"
+      networks:
+        - live-chat
+networks:
+  live-chat:
+    driver: bridge
+volumes:
+  caddy-data:
+    driver: local
+  caddy-config:
+    driver: local

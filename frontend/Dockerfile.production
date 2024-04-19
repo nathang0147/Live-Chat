@@ -1,0 +1,42 @@
+
+### First Stage
+FROM node:18-bullseye-slim AS BUILDER
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+ARG BASE_URL
+ENV REACT_APP_BASE_URL=${BASE_URL}
+
+RUN npm run build
+
+### Preview stage: Run vite preview if PREVIEW argument is true
+FROM node:18-bullseye-slim AS PREVIEW
+
+WORKDIR /app
+
+COPY --from=BUILDER /app /app
+
+ARG PREVIEW
+RUN if [ "$PREVIEW" = "true" ] ; then npm run preview ; fi
+
+EXPOSE 5000
+
+### Secondary stage: Copy the build files to the caddy server
+#FROM caddy:2.1.1-alpine
+#
+#ARG CADDYFILE
+#COPY ${CADDYFILE} /etc/caddy/Caddyfile
+#
+#COPY --from=BUILDER /app/dist /srv
+#
+#EXPOSE 80
+#
+#EXPOSE 443
+
+### Secondary stage: Copy the build files to the nginx server

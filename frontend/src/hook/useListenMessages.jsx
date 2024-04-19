@@ -9,8 +9,6 @@ const useListenMessages = () => {
     const {socket} = useSocketContext()
     const {messages, setMessages} = useConversation();
 
-    console.log("Messages before get by socket", messages);
-
 
     useEffect(() => {
         socket?.on("newMessage", (newMessage) => {
@@ -20,7 +18,7 @@ const useListenMessages = () => {
         });
 
         return () => socket?.off("newMessage");
-    }, [socket, setMessages]);
+    }, [socket, setMessages, messages]);
 };
 
 export default useListenMessages;
