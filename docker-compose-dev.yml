@@ -30,7 +30,7 @@ services:
       - client
     build:
       context: ./nginx
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - "8080:80"
     networks:

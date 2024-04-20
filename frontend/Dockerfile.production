@@ -2,6 +2,8 @@
 ### First Stage
 FROM node:18-bullseye-slim AS BUILDER
 
+LABEL description="Vite frontend live preview and production build"
+
 WORKDIR /app
 
 COPY package.json .
@@ -40,3 +42,10 @@ EXPOSE 5000
 #EXPOSE 443
 
 ### Secondary stage: Copy the build files to the nginx server
+FROM nginx
+
+EXPOSE 4000
+
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=BUILDER /app/dist /usr/share/nginx.html

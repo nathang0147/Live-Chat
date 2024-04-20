@@ -16,7 +16,7 @@ export const SocketContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (chat_user) {
-            const socket = io("http://localhost:3000/socket.io", {
+            const socket = io("http://localhost:8080", {
                 query: {
                     userId: chat_user._id,
                 },

@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as toast from "react-dom/test-utils";
 export const api = axios.create({
-    baseURL: "http://localhost:3000/api",
+    baseURL: "http://localhost:8080/api",
     withCredentials: true
 });
 

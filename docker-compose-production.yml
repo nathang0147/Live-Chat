@@ -1,14 +1,15 @@
 version: "3"
 services:
   client:
-    image: client-production:local
+    image: client-production:product
+    build: ./frontend/
     restart: unless-stopped
 #    ports:
 #      - "80:80"
 #      - "443:443"
     volumes:
-      - ./app/node_modules
       - ./frontend:/app
+      - /app/node_modules
 
     networks:
       - live-chat
@@ -17,6 +18,7 @@ services:
 #    ports:
 #      - "3000:3000"
     restart: unless-stopped
+    build: ./backend/
     env_file: ./backend/.env
     networks:
       - live-chat
